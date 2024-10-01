@@ -5,9 +5,9 @@ import Header from "../components/Header"; // Assicurati di importare il tuo hea
 import { AuthProvider } from "../contexts/AuthContext"; // Importa l'AuthProvider
 
 import { AppProps } from "next/app";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>

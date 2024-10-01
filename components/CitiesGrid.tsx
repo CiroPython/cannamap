@@ -1,35 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 interface City {
-  name: string;
-  description: string;
-  imageUrl: string;
+  city: string;
+  profileImage: string;
 }
 
-const cities: City[] = [
-  {
-    name: "Barcellona",
-    description: "I migliori club di cannabis a Barcellona.",
-    imageUrl: "/images/barcelona.jpg",
-  },
-  {
-    name: "Madrid",
-    description: "Scopri i club di cannabis a Madrid.",
-    imageUrl: "/images/madrid.jpg",
-  },
-  {
-    name: "Valencia",
-    description: "Trova i club di cannabis a Valencia.",
-    imageUrl: "/images/valencia.jpg",
-  },
-];
-
 const CitiesGrid: React.FC = () => {
+  const [cities, setCities] = useState<City[]>([]);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      try {
+        const { data } = await axios.get("/api/cities");
+        setCities(data);
+      } catch (error) {
+        console.error("Errore nel recupero delle città:", error);
+      }
+    };
+
+    fetchCities();
+  }, []);
+
+  const handleCityClick = (city: string) => {
+    // Naviga alla pagina dei club della città selezionata
+    router.push(`/clubs/${city}`);
+  };
+
   return (
     <Container sx={{ marginTop: "30px" }}>
       <Grid container spacing={4}>
@@ -38,7 +42,9 @@ const CitiesGrid: React.FC = () => {
             <Card
               sx={{
                 height: "300px",
-                backgroundImage: `url(${city.imageUrl})`,
+                backgroundImage: `url(${
+                  city.profileImage || "/images/default.jpg"
+                })`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 color: "white",
@@ -53,13 +59,11 @@ const CitiesGrid: React.FC = () => {
                   backgroundColor: "rgba(255,255,255,0.9)", // Effetto chiaro su hover
                 },
               }}
+              onClick={() => handleCityClick(city.city)}
             >
               <CardContent sx={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
                 <Typography variant="h5" component="div">
-                  {city.name}
-                </Typography>
-                <Typography variant="body2" color="inherit">
-                  {city.description}
+                  {city.city}
                 </Typography>
               </CardContent>
             </Card>

@@ -1,8 +1,11 @@
 import ClubFrom from "@/lib/models/ClubFrom";
-import dbConnect from "../../../lib/mongodb";
+import dbConnect from "../../../../lib/mongodb";
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method === "POST") {
     try {
       await dbConnect();

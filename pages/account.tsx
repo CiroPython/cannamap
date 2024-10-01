@@ -1,3 +1,4 @@
+import LogoutButton from "@/components/LogoutButton";
 import { Container, Typography, Box, Button } from "@mui/material";
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
@@ -41,18 +42,7 @@ const Account = ({ user }: { user: User }) => {
           ))
         )}
 
-        <Button
-          variant="contained"
-          color="secondary"
-          sx={{ mt: 3 }}
-          onClick={() => {
-            fetch("/api/auth/logout", { method: "POST" }).then(
-              () => (window.location.href = "/login")
-            );
-          }}
-        >
-          Logout
-        </Button>
+        <LogoutButton />
       </Box>
     </Container>
   );

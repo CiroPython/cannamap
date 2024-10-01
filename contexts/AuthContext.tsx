@@ -1,19 +1,17 @@
 import { createContext, useState, useEffect, ReactNode } from "react";
-import cookie from "js-cookie";
+import { setCookie, destroyCookie, parseCookies } from "nookies";
 import { useRouter } from "next/router";
 
 interface AuthContextProps {
   isLoggedIn: boolean;
-  setIsLoggedIn: (loggedIn: boolean) => void;
   loginJWF: (token: string) => void;
-  logout: () => void; // Aggiungi la funzione logout
+  logout: () => void;
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   isLoggedIn: false,
-  setIsLoggedIn: () => {},
   loginJWF: () => {},
-  logout: () => {}, // Aggiungi una funzione vuota per logout nel contesto predefinito
+  logout: () => {},
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -21,25 +19,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const router = useRouter();
 
   useEffect(() => {
-    const token = cookie.get("token");
-    setIsLoggedIn(!!token); // Aggiorna lo stato basandoti sulla presenza del token
+    const { token } = parseCookies(); // Recupera i cookie dal client
+    setIsLoggedIn(!!token); // Aggiorna lo stato in base alla presenza del token
   }, []);
 
   const loginJWF = (token: string) => {
-    cookie.set("token", token); // Imposta il token come cookie
+    setCookie(null, "token", token, {
+      maxAge: 30 * 24 * 60 * 60, // 30 giorni
+      path: "/",
+    });
     setIsLoggedIn(true); // Aggiorna lo stato
   };
 
   const logout = () => {
-    cookie.remove("token");
-    setIsLoggedIn(false); // Aggiorna lo stato di logout
+    destroyCookie(null, "token");
+    setIsLoggedIn(false); // Aggiorna lo stato per il logout
     router.push("/login"); // Redirige alla pagina di login
   };
 
   return (
-    <AuthContext.Provider
-      value={{ isLoggedIn, setIsLoggedIn, loginJWF, logout }} // Aggiungi logout qui
-    >
+    <AuthContext.Provider value={{ isLoggedIn, loginJWF, logout }}>
       {children}
     </AuthContext.Provider>
   );

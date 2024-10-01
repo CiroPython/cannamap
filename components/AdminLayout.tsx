@@ -2,8 +2,12 @@ import { Box, AppBar, Toolbar, Typography, Button } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import cookie from "js-cookie";
+import { ReactNode } from "react";
 
-const AdminLayout = ({ children }) => {
+interface AdminLayoutProps {
+  children: ReactNode; // Definisci children come ReactNode
+}
+const AdminLayout = ({ children }: AdminLayoutProps) => {
   const router = useRouter();
 
   const handleLogout = () => {

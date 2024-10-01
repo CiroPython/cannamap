@@ -1,8 +1,15 @@
-import { GetServerSideProps } from "next";
 import AdminLayout from "../../components/AdminLayout";
-import { Typography, Table, TableBody, TableCell, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Paper,
+} from "@mui/material";
 import dbConnect from "../../lib/mongodb";
-import ClubFrom from "@/lib/models/ClubFrom";  // Il modello dei formulari
+import ClubFrom from "@/lib/models/ClubFrom"; // Il modello dei formulari
 import { withAdminAuth } from "@/lib/withAdminAuth";
 
 interface Form {
@@ -49,13 +56,13 @@ const FormsPage = ({ forms }: { forms: Form[] }) => {
   );
 };
 
-export const getServerSideProps= withAdminAuth(async (context: { req: any; }) => {
+export const getServerSideProps = withAdminAuth(async () => {
   await dbConnect();
   const forms = await ClubFrom.find().lean();
 
   return {
     props: {
-      forms: JSON.parse(JSON.stringify(forms)),  // Serializziamo i dati per il passaggio lato client
+      forms: JSON.parse(JSON.stringify(forms)), // Serializziamo i dati per il passaggio lato client
     },
   };
 });

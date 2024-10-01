@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { useRouter } from "next/router";
 import {
   Button,
@@ -8,6 +8,7 @@ import {
   Box,
   Link,
 } from "@mui/material";
+import { AuthContext } from "@/contexts/AuthContext"; // Importa il contesto Auth
 import { GetServerSideProps } from "next";
 import { parseCookies } from "nookies";
 
@@ -15,6 +16,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const { loginJWF } = useContext(AuthContext); // Usa il contesto per gestire il login
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,13 +31,15 @@ const Login = () => {
       });
 
       if (res.ok) {
-        router.push("/account");
+        const data = await res.json();
+        loginJWF(data.token); // Usa la funzione del contesto per autenticare l'utente
+        router.push("/account"); // Redirige l'utente alla pagina account
       } else {
         const data = await res.json();
         setError(data.message);
       }
     } catch (err) {
-      setError("Errore di connessione con il server"+err);
+      setError("Errore di connessione con il server: " + err);
     }
   };
 
