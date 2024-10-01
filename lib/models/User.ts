@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  token: { type: String, required: true },
+  token: { type: String, required: false }, // Mod
   role: {
     type: String,
     enum: ["user", "admin"], // Definiamo i ruoli possibili

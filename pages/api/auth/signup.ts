@@ -34,9 +34,6 @@ export default async function handler(
       email,
       password: hashedPassword,
     });
-
-    await user.save();
-
     const token = jwt.sign(
       { userId: user._id },
       process.env.JWT_SECRET as string,
@@ -44,6 +41,12 @@ export default async function handler(
         expiresIn: process.env.JWT_EXPIRES_IN,
       }
     );
+    
+    // Aggiungi il token all'utente prima di salvarlo
+    user.token = token;
+    
+    await user.save();
+
 
     res.setHeader(
       "Set-Cookie",

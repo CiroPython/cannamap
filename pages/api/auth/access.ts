@@ -25,6 +25,11 @@ export default async function handler(
         return res.status(401).json({ message: "Credenziali non valide" });
       }
 
+      // Verifica che JWT_SECRET sia presente
+      if (!process.env.JWT_SECRET) {
+        throw new Error("JWT_SECRET non definito");
+      }
+
       const token = jwt.sign(
         { userId: user._id, role: user.role }, // Aggiungiamo il ruolo nel token
         process.env.JWT_SECRET,
@@ -43,8 +48,8 @@ export default async function handler(
       );
 
       return res.status(200).json({ message: "Login effettuato con successo" });
-    } catch (error) {
-      return res.status(500).json({ message: "Errore del server" });
+    } catch  {
+      return res.status(500).json({ message: "Errore del server: " });
     }
   } else {
     res.status(405).json({ message: "Metodo non consentito" });

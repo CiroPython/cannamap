@@ -7,6 +7,7 @@ import { AuthProvider } from "../contexts/AuthContext"; // Importa l'AuthProvide
 import { AppProps } from "next/app";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>

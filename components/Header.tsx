@@ -139,7 +139,7 @@ const Header = () => {
           <List>
             {menuItems.map((item, index) => (
               <Link key={index} href={item.href} passHref legacyBehavior>
-                <ListItem button>
+                <ListItem component={"a"}>
                   <ListItemText primary={item.text} />
                 </ListItem>
               </Link>

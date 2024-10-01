@@ -95,21 +95,24 @@ const ClubRegistrationForm = () => {
     contactEmail: "",
   });
 
-  const [availableProvinces, setAvailableProvinces] = useState([]);
+  const [availableProvinces, setAvailableProvinces] = useState<string[]>([]);
   const router = useRouter();
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
     });
 
     if (e.target.name === "state") {
-      setAvailableProvinces(provinces[e.target.value]);
+      const selectedState = e.target.value as keyof typeof provinces; // Aggiunta type assertion
+      setAvailableProvinces(provinces[selectedState] || []);
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await fetch("/api/clubs/register", {

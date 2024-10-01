@@ -35,7 +35,7 @@ const Login = () => {
         setError(data.message);
       }
     } catch (err) {
-      setError("Errore di connessione con il server");
+      setError("Errore di connessione con il server"+err);
     }
   };
 

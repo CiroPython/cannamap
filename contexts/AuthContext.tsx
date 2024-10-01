@@ -6,12 +6,14 @@ interface AuthContextProps {
   isLoggedIn: boolean;
   setIsLoggedIn: (loggedIn: boolean) => void;
   loginJWF: (token: string) => void;
+  logout: () => void; // Aggiungi la funzione logout
 }
 
 export const AuthContext = createContext<AuthContextProps>({
   isLoggedIn: false,
   setIsLoggedIn: () => {},
   loginJWF: () => {},
+  logout: () => {}, // Aggiungi una funzione vuota per logout nel contesto predefinito
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -36,7 +38,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   return (
     <AuthContext.Provider
-      value={{ isLoggedIn, setIsLoggedIn, loginJWF, logout }}
+      value={{ isLoggedIn, setIsLoggedIn, loginJWF, logout }} // Aggiungi logout qui
     >
       {children}
     </AuthContext.Provider>
